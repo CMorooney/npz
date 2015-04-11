@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.calvinmorooney.npz.Adapters.ParseFriendsAdapter;
 import com.calvinmorooney.npz.Helpers.ParseHelper;
@@ -95,18 +96,24 @@ public class MainActivity extends ActionBarActivity {
         parsePush.sendInBackground(new SendCallback() {
             @Override
             public void done(ParseException e) {
-                if(e != null) {
-                    Log.e("PUSH ERR: ", e.getMessage());
+                if(e == null) {
+                    pushSuccess();
                 }else{
-                    Log.e("PUSH ", "SUCCESS");
-                    closeActivity();
+                    pushError(e.getMessage());
                 }
             }
         });
     }
 
-    void closeActivity()
+    void pushSuccess()
     {
-        finish();
+        Log.e("PUSH RESULT: ","success");
+        Toast.makeText(this, "push sent", Toast.LENGTH_SHORT);
+    }
+
+    void pushError(String err)
+    {
+        Log.e("PUSH RESULT: ", err);
+        Toast.makeText(this, "push fail: " + err, Toast.LENGTH_SHORT);
     }
 }

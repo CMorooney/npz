@@ -8,11 +8,13 @@ import android.net.Uri;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.calvinmorooney.npz.Receivers.PushReceiver;
 import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParsePush;
 import com.parse.ParseUser;
+import com.parse.PushService;
 import com.parse.SaveCallback;
 
 public class AppState extends Application {
