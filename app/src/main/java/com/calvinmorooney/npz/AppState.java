@@ -49,7 +49,7 @@ public class AppState extends Application {
 
                     // Associate the device with a user
                     ParseInstallation installation = ParseInstallation.getCurrentInstallation();
-//                    installation.put("user", ParseUser.getCurrentUser());
+                    installation.put("username", ParseUser.getCurrentUser().getUsername());
                     installation.saveInBackground();
                 } else {
                     Log.e("com.parse.push", "failed to subscribe for push", e);

@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,11 +16,14 @@ import android.widget.TextView;
 import com.calvinmorooney.npz.Adapters.ParseFriendsAdapter;
 import com.calvinmorooney.npz.Helpers.ParseHelper;
 import com.calvinmorooney.npz.Services.FloatingNippleService;
+import com.parse.ParseException;
 import com.parse.ParseInstallation;
 import com.parse.ParseObject;
 import com.parse.ParsePush;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
+import com.parse.PushService;
+import com.parse.SendCallback;
 
 import java.util.List;
 
@@ -82,17 +86,27 @@ public class MainActivity extends ActionBarActivity {
         p.put ("sender", ParseUser.getCurrentUser());
         p.saveInBackground();
 
-        // Find users near a given location
-        ParseQuery userQuery = ParseUser.getQuery();
-        userQuery.whereEqualTo("objectId", user.getObjectId());
+        ParseQuery pQuery = ParseInstallation.getQuery();
+        pQuery.whereEqualTo("username", user.getUsername());
 
-        // Find devices associated with these users
-        ParseQuery pushQuery = ParseInstallation.getQuery();
-        pushQuery.whereMatchesQuery("user", userQuery);
+        ParsePush parsePush = new ParsePush();
+        parsePush.setQuery(pQuery);
+        parsePush.setMessage("npz");
+        parsePush.sendInBackground(new SendCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e != null) {
+                    Log.e("PUSH ERR: ", e.getMessage());
+                }else{
+                    Log.e("PUSH ", "SUCCESS");
+                    closeActivity();
+                }
+            }
+        });
+    }
 
-        ParsePush push = new ParsePush();
-        push.setQuery(pushQuery); // Set our Installation query
-        push.setMessage("nipple from " + ParseUser.getCurrentUser().getUsername());
-        push.sendInBackground();
+    void closeActivity()
+    {
+        finish();
     }
 }
