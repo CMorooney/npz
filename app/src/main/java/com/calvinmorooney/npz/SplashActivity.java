@@ -30,17 +30,18 @@ public class SplashActivity extends ActionBarActivity {
         if (storedCreds == null)
         {
             goToLoginActivity();
+            finish();
         }
         else
         {
             ParseUser.logInInBackground(storedCreds [0], storedCreds [1], new LogInCallback() {
                 public void done(ParseUser user, ParseException e) {
                     if (user != null) {
-                        ((AppState) getApplication()).user = user;
                         goToMainActivity ();
                     } else {
                         goToLoginActivity();
                     }
+                    finish();
                 }
             });
         }
@@ -55,6 +56,7 @@ public class SplashActivity extends ActionBarActivity {
     void goToMainActivity ()
     {
         Intent i = new Intent (this, MainActivity.class);
+        ((AppState) getApplication()).initialize();
         startActivity (i);
     }
 }

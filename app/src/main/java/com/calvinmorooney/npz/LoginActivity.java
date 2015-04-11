@@ -53,7 +53,6 @@ public class LoginActivity extends ActionBarActivity {
         ParseUser.logInInBackground(username.getText ().toString (), password.getText ().toString (), new LogInCallback() {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
-                    ((AppState) getApplication()).user = user;
                     goToMainActivity ();
                 } else {
                     // Signup failed. Look at the ParseException to see what happened.
@@ -65,6 +64,7 @@ public class LoginActivity extends ActionBarActivity {
     void goToMainActivity ()
     {
         KeychainHelper.storeCredentials (this, username.getText().toString(), password.getText().toString());
+        ((AppState) getApplication()).initialize();
         startActivity (new Intent (this, MainActivity.class));
     }
 }

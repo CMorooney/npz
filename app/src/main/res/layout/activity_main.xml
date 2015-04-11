@@ -10,4 +10,10 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:textSize="20dp" />
+    <Button
+        android:id="@+id/main_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:onClick="openContacts"
+        android:text="@string/send_a_nipple"/>
 </LinearLayout>

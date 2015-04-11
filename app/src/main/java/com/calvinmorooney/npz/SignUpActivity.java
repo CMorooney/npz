@@ -73,7 +73,6 @@ public class SignUpActivity extends ActionBarActivity {
         {
             public void done(ParseUser user, ParseException e) {
                 if (user != null) {
-                    ((AppState) getApplication()).user = user;
                     goToMainActivity ();
                 } else {
                     handleSignUpError (e);
@@ -91,6 +90,7 @@ public class SignUpActivity extends ActionBarActivity {
     void goToMainActivity ()
     {
         KeychainHelper.storeCredentials (this, username.getText().toString(), password.getText().toString());
+        ((AppState) getApplication()).initialize();
         startActivity (new Intent(this, MainActivity.class));
     }
 }

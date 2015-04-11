@@ -6,16 +6,22 @@ import android.app.*;
 import android.provider.ContactsContract;
 import android.net.Uri;
 import android.database.Cursor;
+import android.util.Log;
+
 import com.parse.Parse;
+import com.parse.ParseException;
+import com.parse.ParseInstallation;
+import com.parse.ParsePush;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 public class AppState extends Application {
 
     final String CLIENT_ID = "LyfrTXo1XlbfMhgbxbCSsDrRavB4QxjIJlDCjerH";
     final String APP_ID = "vaAZ53fv0UAg48EPvPHvSoBBiBQFjV9y6HqQvsqF";
 
-    public ParseUser user;
     public ArrayList<String> deviceDirectory;
+    public List<ParseUser> friendsList;
 
     @Override
     public void onCreate ()
@@ -26,6 +32,30 @@ public class AppState extends Application {
 
         Parse.enableLocalDatastore(this);
         Parse.initialize(this, APP_ID, CLIENT_ID);
+    }
+
+    public void initialize ()
+    {
+        subscribeToPushes();
+    }
+
+    private void subscribeToPushes ()
+    {
+        ParsePush.subscribeInBackground("", new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e == null) {
+                    Log.d("com.parse.push", "successfully subscribed to the broadcast channel.");
+
+                    // Associate the device with a user
+                    ParseInstallation installation = ParseInstallation.getCurrentInstallation();
+//                    installation.put("user", ParseUser.getCurrentUser());
+                    installation.saveInBackground();
+                } else {
+                    Log.e("com.parse.push", "failed to subscribe for push", e);
+                }
+            }
+        });
     }
 
     private void loadPhoneList ()
