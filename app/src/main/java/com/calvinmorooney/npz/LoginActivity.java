@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.calvinmorooney.npz.Helpers.KeychainHelper;
+import com.calvinmorooney.npz.Helpers.ParseHelper;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -48,23 +49,7 @@ public class LoginActivity extends ActionBarActivity {
 
     private void logIn ()
     {
-        ParseUser user = new ParseUser ();
-
-        ParseUser.logInInBackground(username.getText ().toString (), password.getText ().toString (), new LogInCallback() {
-            public void done(ParseUser user, ParseException e) {
-                if (user != null) {
-                    goToMainActivity ();
-                } else {
-                    // Signup failed. Look at the ParseException to see what happened.
-                }
-            }
-        });
-    }
-
-    void goToMainActivity ()
-    {
-        KeychainHelper.storeCredentials (this, username.getText().toString(), password.getText().toString());
-        ((AppState) getApplication()).initialize();
-        startActivity (new Intent (this, MainActivity.class));
+        ParseHelper p = new ParseHelper(this);
+        p.logIn(username.getText().toString(), password.getText().toString());
     }
 }

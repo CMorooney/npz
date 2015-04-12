@@ -12,9 +12,24 @@ public class KeychainHelper {
         SharedPreferences keychain = c.getSharedPreferences("npz", c.MODE_PRIVATE);
         SharedPreferences.Editor editor = keychain.edit ();
 
-        editor.putString("USER", username);
-        editor.putString("PASS", password);
-        editor.commit();
+        boolean shouldSave = false;
+
+        if(keychain.getString("USER", "") == null || keychain.getString("USER", "").isEmpty())
+        {
+            editor.putString("USER", username);
+            shouldSave = true;
+        }
+
+        if(keychain.getString("PASS", "") == null || keychain.getString("PASS", "").isEmpty())
+        {
+            editor.putString("PASS", password);
+            shouldSave = true;
+        }
+
+        if(shouldSave)
+        {
+            editor.commit();
+        }
     }
 
     public static String[] getCredentials (Context c){

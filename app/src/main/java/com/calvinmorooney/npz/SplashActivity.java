@@ -1,6 +1,7 @@
 package com.calvinmorooney.npz;
 
 import com.calvinmorooney.npz.Helpers.KeychainHelper;
+import com.calvinmorooney.npz.Helpers.ParseHelper;
 import com.calvinmorooney.npz.util.SystemUiHider;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
@@ -34,29 +35,14 @@ public class SplashActivity extends ActionBarActivity {
         }
         else
         {
-            ParseUser.logInInBackground(storedCreds [0], storedCreds [1], new LogInCallback() {
-                public void done(ParseUser user, ParseException e) {
-                    if (user != null) {
-                        goToMainActivity ();
-                    } else {
-                        goToLoginActivity();
-                    }
-                    finish();
-                }
-            });
+            ParseHelper p = new ParseHelper(this);
+            p.logIn(storedCreds [0], storedCreds [1]);
         }
     }
 
     void goToLoginActivity ()
     {
         Intent i = new Intent(this, LoginActivity.class);
-        startActivity (i);
-    }
-
-    void goToMainActivity ()
-    {
-        Intent i = new Intent (this, MainActivity.class);
-        ((AppState) getApplication()).initialize();
         startActivity (i);
     }
 }

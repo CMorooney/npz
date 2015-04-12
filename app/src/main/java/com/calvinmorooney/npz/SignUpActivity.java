@@ -22,7 +22,6 @@ public class SignUpActivity extends ActionBarActivity {
 
     Button btnSignUp;
     EditText email, username, password;
-    ProgressDialog loadingDialog;
 
     @Override
     protected void onCreate(Bundle bundle) {
@@ -38,64 +37,7 @@ public class SignUpActivity extends ActionBarActivity {
 
     public void signUp (View v)
     {
-        ParseUser user = new ParseUser();
-        user.setUsername(username.getText().toString());
-        user.setPassword(password.getText().toString());
-        user.setEmail(email.getText().toString());
-
-        TelephonyManager mTelephonyMgr;
-
-        mTelephonyMgr = (TelephonyManager) getSystemService (TELEPHONY_SERVICE);
-
-        String number = mTelephonyMgr.getLine1Number();
-
-        number = ParseHelper.parsePhoneNumer(number);
-
-        user.put ("phone", number);
-
-
-        loadingDialog = new ProgressDialog (this);
-        loadingDialog.setTitle("one sec..");
-        loadingDialog.show();
-
-        user.signUpInBackground(new SignUpCallback()
-        {
-            public void done(ParseException e)
-            {
-                loadingDialog.dismiss();
-                if (e == null) {
-                    handleSignUpSuccess();
-                } else {
-                    handleSignUpError (e);
-                }
-            }
-        });
-    }
-
-    void handleSignUpSuccess ()
-    {
-        ParseUser.logInInBackground(username.getText ().toString (), password.getText ().toString (), new LogInCallback()
-        {
-            public void done(ParseUser user, ParseException e) {
-                if (user != null) {
-                    goToMainActivity ();
-                } else {
-                    handleSignUpError (e);
-
-                }
-            }
-        });
-    }
-
-    void handleSignUpError (ParseException e)
-    {
-        Toast.makeText (this, e.getMessage(), Toast.LENGTH_SHORT).show ();
-    }
-
-    void goToMainActivity ()
-    {
-        KeychainHelper.storeCredentials (this, username.getText().toString(), password.getText().toString());
-        ((AppState) getApplication()).initialize();
-        startActivity (new Intent(this, MainActivity.class));
+        ParseHelper p = new ParseHelper(this);
+        p.signUpAndLogIn(username.getText().toString(), password.getText().toString(), email.getText().toString());
     }
 }
