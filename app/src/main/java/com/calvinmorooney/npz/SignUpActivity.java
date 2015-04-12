@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.calvinmorooney.npz.Helpers.KeychainHelper;
+import com.calvinmorooney.npz.Helpers.ParseHelper;
 import com.parse.*;
 
 
@@ -48,13 +49,7 @@ public class SignUpActivity extends ActionBarActivity {
 
         String number = mTelephonyMgr.getLine1Number();
 
-        number = number.replace (" ", "").replace ("(", "").replace (")", "").replace ("+", "").replace ("-", "");
-
-        if(number.length () > 10)
-        {
-            number = number.substring (number.length () - 10);
-        }
-
+        number = ParseHelper.parsePhoneNumer(number);
 
         user.put ("phone", number);
 

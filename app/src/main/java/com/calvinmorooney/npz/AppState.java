@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.database.Cursor;
 import android.util.Log;
 
+import com.calvinmorooney.npz.Helpers.ParseHelper;
 import com.calvinmorooney.npz.Receivers.PushReceiver;
 import com.parse.Parse;
 import com.parse.ParseException;
@@ -73,15 +74,10 @@ public class AppState extends Application {
             do {
                 String number = cursor.getString (cursor.getColumnIndex (projection [0]));
 
-                number = number.replace (" ", "").replace ("(", "").replace (")", "").replace ("+", "").replace ("-", "");
-
-                if(number.length () > 10)
-                {
-                    number = number.substring (number.length () - 10);
-                }
+                number = ParseHelper.parsePhoneNumer(number);
 
                 Log.e ("number: ", number);
-                deviceDirectory.add (number);
+                deviceDirectory.add(number);
 
             }  while (cursor.moveToNext());
         }
