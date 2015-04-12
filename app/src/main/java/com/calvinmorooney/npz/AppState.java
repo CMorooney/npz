@@ -80,6 +80,7 @@ public class AppState extends Application {
                     number = number.substring (number.length () - 10);
                 }
 
+                Log.e ("number: ", number);
                 deviceDirectory.add (number);
 
             }  while (cursor.moveToNext());

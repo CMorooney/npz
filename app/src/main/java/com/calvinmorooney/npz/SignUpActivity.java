@@ -46,7 +46,17 @@ public class SignUpActivity extends ActionBarActivity {
 
         mTelephonyMgr = (TelephonyManager) getSystemService (TELEPHONY_SERVICE);
 
-        user.put ("phone", mTelephonyMgr.getLine1Number ());
+        String number = mTelephonyMgr.getLine1Number();
+
+        number = number.replace (" ", "").replace ("(", "").replace (")", "").replace ("+", "").replace ("-", "");
+
+        if(number.length () > 10)
+        {
+            number = number.substring (number.length () - 10);
+        }
+
+
+        user.put ("phone", number);
 
 
         loadingDialog = new ProgressDialog (this);
